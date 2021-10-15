@@ -10,10 +10,20 @@
     <title><%= title %> </title>
 </head>
 
-<body>
-    <%- include('include/header.ejs') %>
+<body class="confirmed">
+
+    <%- include('include/header.ejs', { loggedIn: false, user: '' }) %>
 
     <h1>Confirmed</h1>
+
+    <form action="/login" method="get">
+
+        <p>Your email address has been confirmed!</p>
+        <p>Now you can login and enjoy our services.</p>
+
+        <button type="submit">LOGIN</button>
+
+    </form>
 
 </body>
 

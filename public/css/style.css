@@ -38,7 +38,9 @@ header li:first-of-type {
 
 /****************************************************************************/
 .login,
-.register {
+.register,
+.confirmation,
+.confirmed {
     text-align: center;
 }
 form {
@@ -49,6 +51,7 @@ form {
     flex-direction: column;
     align-content: center;
     padding: 1rem;
+    margin-top: 1rem;
 }
 form div {
     padding: 0 0 1rem;
@@ -62,6 +65,11 @@ form label {
 }
 form input {
     width: 20rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+}
+form p {
+    /* width: 20rem; */
     padding: 0.5rem;
     font-size: 1.2rem;
 }
@@ -81,7 +89,12 @@ form button {
     align-items: center;
     text-align: center;
 }
+.secret h1 {
+    padding-bottom: 1rem;
+}
 .secret img {
     display: inline-block;
     width: 50vw;
 }
+
+/****************************************************************************/

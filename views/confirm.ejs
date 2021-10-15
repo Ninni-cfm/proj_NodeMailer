@@ -10,16 +10,22 @@
     <title><%= title %> </title>
 </head>
 
-<body>
-    <%- include('include/header.ejs') %>
+<body class="confirmation">
+    <%- include('include/header.ejs', {loggedIn: false, user:''}) %>
 
     <h1>Confirmation required</h1>
-    <div>
+
+    <form action="/resend" method="post">
+
+        <input type="hidden" name="emailAddress" value=<%= email %>>
+        <input type="hidden" name="confirmationCode" value=<%= confirmationCode %>>
+
         <p>A confirmation email has been send to <%= email %>.</p>
         <p>Please click the link in the email to confirm your email address!</p>
 
-        <a href="/resend">Resend Confirmation Email</a>
-    </div>
+        <button type="submit">Resend Confirmation Email</button>
+
+    </form>
 
 </body>
 

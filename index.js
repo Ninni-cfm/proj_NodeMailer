@@ -49,10 +49,6 @@ app.listen(port, () =>
 
 app.get('/', (req, res) => {
 
-    // debugObject(req);
-    var fullUrl = req.protocol + '://' + req.get('host');// + req.originalUrl;
-    console.log(fullUrl);
-
     if (!loggedIn) {
         res.redirect('/login');
         return;
@@ -151,14 +147,18 @@ app.get('/confirm/:code', (req, res) => {
 
         fs.writeFile('./data/users.json', JSON.stringify(users, null, 4), "utf-8", (err) => {
             if (err) throw err;
-
-            res.render('confirmed', { title: title });
+            currentUser = users[index];
+            res.render('confirmed', { title: title },);
         });
     }
 });
 //----------------------------------------------------------------------------
-app.get('/confirmed', (req, res) => {
+app.post('/resend', (req, res) => {
 
+    const baseUrl = req.protocol + '://' + req.get('host');
+
+    sendConfirmationMail(baseUrl, req.body.emailAddress, req.body.confirmationCode);
+    res.render('confirm', { title: title, email: req.body.emailAddress, confirmationCode: req.body.confirmationCode });
 });
 
 //============================================================================
@@ -190,8 +190,8 @@ function sendConfirmationMail(baseUrl, emailAddress, confirmationCode) {
 
     transporter.sendMail(message, (err, info) => {
         if (err) throw err;
-        console.log(`Message sent to ${emailAddress}...`);
-        console.log(info);
+        // console.log(`Message sent to ${emailAddress}...`);
+        // console.log(info);
     });
 }
 
