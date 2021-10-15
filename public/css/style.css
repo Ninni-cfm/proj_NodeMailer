@@ -1,0 +1,62 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4rem;
+}
+header ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+}
+header ul li {
+    padding-left: 2rem;
+}
+header a {
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: #333;
+}
+header a:visited {
+    color: #333;
+}
+
+header li:first-of-type {
+    justify-self: flex-start;
+}
+
+.login,
+.register {
+    text-align: center;
+}
+form {
+    width: 40rem;
+    margin: 0 auto;
+    border: 2px solid #888;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 1rem;
+}
+
+form div {
+    padding: 0 0 1rem;
+}
+form label {
+    padding: 0.5rem;
+    display: inline-block;
+    width: 10rem;
+    text-align: right;
+    font-size: 1.5rem;
+}
+form input {
+    width: 20rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+}
+form button {
+    align-self: center;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    margin: 1rem 0 0;
+}

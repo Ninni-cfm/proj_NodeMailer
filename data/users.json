@@ -1,0 +1,11 @@
+[
+    {
+        "id": "39bf6d0c-e1f0-4122-a837-94b229854bff",
+        "firstName": "Klaus",
+        "lastName": "Nienhaus",
+        "email": "k.nienhaus@cfm-net.de",
+        "password": "1234567890",
+        "confirmationCode": "9b699574-04e7-4110-94ed-96f9f9f64495",
+        "status": "active"
+    }
+]
