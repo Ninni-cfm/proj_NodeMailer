@@ -1,11 +1,11 @@
 [
     {
-        "id": "69f8aa7d-d7e9-4b26-ac9a-ae956cd11b80",
+        "id": "34d97c07-cd1a-452c-ab63-9069614c6e44",
         "firstName": "Klaus",
         "lastName": "Nienhaus",
         "email": "k.nienhaus@cfm-net.de",
-        "password": "1234",
-        "confirmationCode": "273b1a82-7736-4b26-807f-03fbe68a31c6",
+        "password": "$2b$10$0yma.oDRwJmTY8wBXIC6XeRXJalWSxWkM3UUQyAUgDeL2joXqKYqW",
+        "confirmationCode": "3538b0ba-a57d-46f1-a8e6-2781644d32f7",
         "status": "active"
     }
 ]

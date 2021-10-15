@@ -2,7 +2,8 @@
 
 const title = 'NodeMailer'
 
-const users = require('./data/users.json')
+const users = require('./data/users.json');
+
 let currentUser = {};
 let loggedIn = false;
 let loginFailed = false;
@@ -17,14 +18,15 @@ const { v4: uuidv4 } = require('uuid');
 //console.log(uuidv4());
 
 const nodemailer = require('nodemailer');
+const Mail = require('nodemailer/lib/mailer');
 
 
 require('dotenv').config();
 
 const bcrypt = require('bcrypt');
-const Mail = require('nodemailer/lib/mailer');
 const { debug } = require('console');
 const saltRounds = 10;
+
 const myPlaintextPassword = 's0/\/\P4$$w0rD';
 const someOtherPlaintextPassword = 'not_bacon';
 
@@ -72,7 +74,11 @@ app.post('/login', (req, res, next) => {
     }
 
     // Compare email address and password with users from 'database'
-    loggedIn = (users.filter(user => user.email.equals(req.body.emailAddress) && user.password.equals(req.body.password)).length > 0);
+    // loggedIn = (users.filter(user => user.email.equals(req.body.emailAddress) && user.password.equals(req.body.password)).length > 0);
+    loggedIn = (users.filter(user =>
+        user.email.equals(req.body.emailAddress) &&
+        bcrypt.compareSync(req.body.password, user.password)).length > 0);
+
 
     // If username and password don't match redirect to login page.
     if (!loggedIn) {
@@ -122,7 +128,7 @@ app.post('/register', (req, res, next) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.emailAddress,
-        password: req.body.password,
+        password: bcrypt.hashSync(req.body.password, saltRounds),
         confirmationCode: uuidv4(),
         status: 'pending'
     };
