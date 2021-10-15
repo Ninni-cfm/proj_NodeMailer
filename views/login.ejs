@@ -12,7 +12,7 @@
 
 <body class="login">
 
-    <%- include('include/header.ejs') %>
+    <%- include('include/header.ejs',{loggedIn: loggedIn, user: user }) %>
 
     <% if (loginFailed) { %>
     <h1>Login failed</h1>

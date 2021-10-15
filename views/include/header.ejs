@@ -1,7 +1,11 @@
 <header>
     <a href="/">HOME</a>
     <ul>
+        <% if (loggedIn) { %>
+        <li><a href="/logout">LOGOUT <%= user.toUpperCase() %> </a></li>
+        <% } else { %>
         <li><a href="/login">LOGIN</a></li>
         <li><a href="/register">REGISTER</a></li>
+        <% } %>
     </ul>
 </header>

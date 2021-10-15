@@ -3,9 +3,11 @@
 const title = 'NodeMailer'
 
 const users = require('./data/users.json')
+let currentUser = {};
 let loggedIn = false;
+let loginFailed = false;
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 
 const express = require('express');
 
@@ -21,6 +23,7 @@ require('dotenv').config();
 
 const bcrypt = require('bcrypt');
 const Mail = require('nodemailer/lib/mailer');
+const { debug } = require('console');
 const saltRounds = 10;
 const myPlaintextPassword = 's0/\/\P4$$w0rD';
 const someOtherPlaintextPassword = 'not_bacon';
@@ -38,50 +41,66 @@ app.use(express.static('public'));
 
 //****************************************************************************
 // start the server
-app.listen(port, () => console.log(`Server listening to localhost:${port}`));
-
+app.listen(port, () =>
+    console.log(`Server listening to localhost:${port}`));
 
 //****************************************************************************
 // the routing...
 
 app.get('/', (req, res) => {
+
+    // debugObject(req);
+    var fullUrl = req.protocol + '://' + req.get('host');// + req.originalUrl;
+    console.log(fullUrl);
+
     if (!loggedIn) {
         res.redirect('/login');
         return;
     }
-    res.render('index', { title: title })
+    // res.render('secret', { title: title, user: currentUser });
+    res.redirect('/secret');
 });
 
 //============================================================================
 
 app.get('/login', (req, res) => {
-    res.render('login', { title: title, loginFailed: false })
+    res.render('login', { title: title, loginFailed: false, loggedIn: loggedIn, user: currentUser ? currentUser.firstName : "" })
 });
 //----------------------------------------------------------------------------
 app.post('/login', (req, res, next) => {
 
-    // check if the email adress already exists...
-    // if it doesn't exist send the user to the register page
+    // Check if the email adress already exists. If it doesn't exist redirect the user to the register page
     if (users.filter(user => user.email.equals(req.body.emailAddress)).length == 0) {
         res.redirect('/register');
         return;
     }
 
-    // compare email address and password with users from 'database'
+    // Compare email address and password with users from 'database'
     loggedIn = (users.filter(user => user.email.equals(req.body.emailAddress) && user.password.equals(req.body.password)).length > 0);
 
+    // If username and password don't match redirect to login page.
     if (!loggedIn) {
-        res.redirect('/login', { loginFailed: true });
+        res.redirect('/login');
         return;
     }
 
-    // if the user data are valid check if the acount is already confirmed
+    // Ff the user data are valid check if the acount is already confirmed. If not redirect to confirm page...
     if (users.filter(user => user.status.equals('pending')).length > 0) {
         res.redirect('/confirm');
         return;
     }
 
-    res.send(req.body);
+    // user has successfully logged in 
+    currentUser = users.filter(user => user.email.equals(req.body.emailAddress))[0];
+    res.redirect('/secret');
+});
+
+//============================================================================
+
+app.get('/logout', (req, res) => {
+    loggedIn = false;
+    currentUser = {};
+    res.render('logout', { title: title, loginFailed: false, loggedIn: loggedIn, user: currentUser ? currentUser.firstName : "" })
 });
 
 //============================================================================
@@ -92,10 +111,12 @@ app.get('/register', (req, res) => {
 //----------------------------------------------------------------------------
 app.post('/register', (req, res, next) => {
 
+    const baseUrl = req.protocol + '://' + req.get('host');
+
     // check if the email adress already exists...
     // if it already exists send the user to the login page
     if (users.filter(user => user.email.equals(req.body.emailAddress)).length > 0) {
-        res.redirect('/login', {});
+        res.redirect('/login');
         return;
     }
 
@@ -115,17 +136,13 @@ app.post('/register', (req, res, next) => {
     fs.writeFile('./data/users.json', JSON.stringify(users, null, 4), "utf-8", (err) => {
         if (err) throw err;
 
-        sendConfirmationMail(newUser.email, newUser.confirmationCode);
+        sendConfirmationMail(baseUrl, newUser.email, newUser.confirmationCode);
         res.render('confirm', { title: title, email: newUser.email, confirmationCode: newUser.confirmationCode });
     });
 });
 
 //============================================================================
 
-app.get('/confirm', (req, res) => {
-
-});
-//----------------------------------------------------------------------------
 app.get('/confirm/:code', (req, res) => {
 
     let index = users.findIndex(user => user.confirmationCode.equals(req.params.code));
@@ -144,19 +161,15 @@ app.get('/confirmed', (req, res) => {
 
 });
 
+//============================================================================
 
+app.get('/secret', (req, res) => {
+    res.render('secret', { title: title, loggedIn: loggedIn, user: currentUser.firstName });
+});
 
-function writeUserList() {
-
-    fs.writeFile('./data/users.json', JSON.stringify(users, null, 4), "utf-8", (err, next) => {
-        if (err) throw err;
-
-        next();
-    });
-}
 
 //****************************************************************************
-function sendConfirmationMail(emailAddress, confirmationCode) {
+function sendConfirmationMail(baseUrl, emailAddress, confirmationCode) {
 
     const transporter = nodemailer.createTransport({
         service: 'gmail', // no need to set host or port etc.
@@ -172,7 +185,7 @@ function sendConfirmationMail(emailAddress, confirmationCode) {
         subject: 'NodeMailer: confirm your email address',
         text: `
         Confirm your email-address:\n
-        http://localhost/confirm/${confirmationCode}`
+        ${baseUrl}/confirm/${confirmationCode}`
     }
 
     transporter.sendMail(message, (err, info) => {

@@ -1,8 +1,20 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: #333;
+    color: #fff;
+
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/****************************************************************************/
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 4rem;
+    padding: 1rem 4rem;
 }
 header ul {
     list-style: none;
@@ -15,16 +27,16 @@ header ul li {
 header a {
     text-decoration: none;
     font-size: 1.5rem;
-    color: #333;
+    color: #fff;
 }
 header a:visited {
-    color: #333;
+    color: #fff;
 }
-
 header li:first-of-type {
     justify-self: flex-start;
 }
 
+/****************************************************************************/
 .login,
 .register {
     text-align: center;
@@ -32,13 +44,12 @@ header li:first-of-type {
 form {
     width: 40rem;
     margin: 0 auto;
-    border: 2px solid #888;
+    border: 2px solid #ccc;
     display: flex;
     flex-direction: column;
     align-content: center;
     padding: 1rem;
 }
-
 form div {
     padding: 0 0 1rem;
 }
@@ -59,4 +70,18 @@ form button {
     padding: 0.5rem 1rem;
     font-size: 1.2rem;
     margin: 1rem 0 0;
+}
+
+/****************************************************************************/
+.secret main {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.secret img {
+    display: inline-block;
+    width: 50vw;
 }

@@ -10,16 +10,14 @@
     <title><%= title %> </title>
 </head>
 
-<body>
-    <%- include('include/header.ejs') %>
+<body class="secret">
 
-    <h1>Confirmation required</h1>
-    <div>
-        <p>A confirmation email has been send to <%= email %>.</p>
-        <p>Please click the link in the email to confirm your email address!</p>
+    <%- include('include/header.ejs', {loggedIn: loggedIn, user: user }) %>
 
-        <a href="/resend">Resend Confirmation Email</a>
-    </div>
+    <main>
+        <h1>You have been logged out!</h1>
+        <img src="/img/you-left-the-team.gif" alt="Welcome">
+    </main>
 
 </body>
 
